@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                      http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.6.xsd">
+
+    <changeSet id="beer-temperature-create-1.0" author="ivpo">
+        <createTable tableName="BEER_TEMPERATURE">
+            <column name="ID" type="BIGINT" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="BEER_ID" type="INTEGER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="TEMP_VALUE" type="DOUBLE"/>
+            <column name="TEMP_UNIT" type="VARCHAR(20)"/>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="FK_BEER"
+                                 baseColumnNames="BEER_ID" baseTableName="BEER_TEMPERATURE"
+                                 referencedColumnNames="ID" referencedTableName="BEER"
+                                 onDelete="CASCADE"/>
+
+    </changeSet>
+
+</databaseChangeLog>
