@@ -18,7 +18,7 @@ public class BeerTemperatureEntity {
     @Column(name = "temp_unit")
     private TemperatureUnit tempUnit;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.ALL})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "beer_id", nullable = false)
     private BeerEntity beer;
 
@@ -61,7 +61,7 @@ public class BeerTemperatureEntity {
         if (o == null || getClass() != o.getClass()) return false;
         BeerTemperatureEntity that = (BeerTemperatureEntity) o;
         return Objects.equals(id, that.id)
-                && Objects.equals(beer.getId(), that.beer.getId())
+                && Objects.equals(beer, that.beer)
                 && Objects.equals(tempValue, that.tempValue)
                 && Objects.equals(tempUnit, that.tempUnit);
     }

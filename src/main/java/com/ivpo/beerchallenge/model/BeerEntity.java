@@ -1,7 +1,5 @@
 package com.ivpo.beerchallenge.model;
 
-import org.springframework.lang.NonNull;
-
 import javax.persistence.*;
 import java.util.List;
 import java.util.Objects;
@@ -22,7 +20,7 @@ public class BeerEntity {
     @Column(name = "temperature")
     private Double temperature;
 
-    @OneToMany(mappedBy = "beer", cascade = {CascadeType.ALL})
+    @OneToMany(mappedBy = "beer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private List<BeerTemperatureEntity> beerTemperatureEntities;
 
     public void setId(Long id) {
@@ -57,6 +55,7 @@ public class BeerEntity {
 
         this.temperature = temperature;
     }
+
     @OneToMany
     public List<BeerTemperatureEntity> getBeerTemperatureEntities() {
         return beerTemperatureEntities;

@@ -3,14 +3,14 @@ package com.ivpo.beerchallenge.service.mapping;
 import com.ivpo.beerchallenge.model.BeerEntity;
 import com.ivpo.beerchallenge.model.BeerTemperatureEntity;
 import com.ivpo.beerchallenge.model.TemperatureUnit;
-import com.ivpo.beerchallenge.model.dto.BeerDto;
-import com.ivpo.beerchallenge.model.dto.TemperatureDto;
+import com.ivpo.beerchallenge.dto.BeerDto;
+import com.ivpo.beerchallenge.dto.TemperatureDto;
 import com.ivpo.beerchallenge.service.json.BeerJson;
 import com.ivpo.beerchallenge.service.json.MashTempJson;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.IntSummaryStatistics;
+import java.util.DoubleSummaryStatistics;
 import java.util.List;
 
 @Component
@@ -34,19 +34,10 @@ public class BeerServiceMapper {
             BeerTemperatureEntity beerTemperatureEntity = new BeerTemperatureEntity();
             beerTemperatureEntity.setBeer(beerEntity);
             beerTemperatureEntity.setTempValue(mt.getTemp().getValue());
-//            setTempUnitValue(mt.getTemp().getUnit(), beerTemperatureEntity);
             beerTemperatureEntity.setTempUnit(TemperatureUnit.fromValue(mt.getTemp().getUnit()));
             beerTemperatureEntities.add(beerTemperatureEntity);
         }
         beerEntity.setBeerTemperatureEntities(beerTemperatureEntities);
-    }
-
-    private static void setTempUnitValue(final String tempUnit, final BeerTemperatureEntity beerTemperatureEntity) {
-        if(tempUnit.equals(TemperatureUnit.FAHRENHEIT))
-            beerTemperatureEntity.setTempUnit(TemperatureUnit.FAHRENHEIT);
-        else {
-            beerTemperatureEntity.setTempUnit(TemperatureUnit.CELSIUS);
-        }
     }
 
     public BeerDto mapBeerEntityToBeerDto(BeerEntity beerEntity) {
@@ -64,8 +55,8 @@ public class BeerServiceMapper {
     }
 
     private static List<TemperatureDto> mapBeerTemperatures(List<BeerTemperatureEntity> beerTemperatureEntities) {
-        List<TemperatureDto> temperatures=new ArrayList<>();
-        for (BeerTemperatureEntity beerTemp: beerTemperatureEntities) {
+        List<TemperatureDto> temperatures = new ArrayList<>();
+        for (BeerTemperatureEntity beerTemp : beerTemperatureEntities) {
             TemperatureDto tempDto = new TemperatureDto();
             tempDto.setTempValue(beerTemp.getTempValue());
             tempDto.setTempUnit(beerTemp.getTempUnit());
@@ -85,11 +76,9 @@ public class BeerServiceMapper {
 
     private static double getAverageTemperature(BeerJson beerJson) {
         List<MashTempJson> mashTemps = beerJson.getMethodJson().getMashTempsJson();
-        IntSummaryStatistics summaryStatistics = mashTemps.stream()
-                .mapToInt((mt) -> Math.toIntExact(Double.valueOf(mt.getTemp().getValue()).longValue())).summaryStatistics();
+        DoubleSummaryStatistics summaryStatistics = mashTemps.stream()
+                .mapToDouble((mt) -> mt.getTemp().getValue()).summaryStatistics();
 
         return summaryStatistics.getAverage();
     }
-
-
 }

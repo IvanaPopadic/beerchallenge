@@ -1,12 +1,16 @@
 package com.ivpo.beerchallenge.controller;
 
+import com.ivpo.beerchallenge.dto.BeerDto;
 import com.ivpo.beerchallenge.exception.BeerNotFoundException;
 import com.ivpo.beerchallenge.exception.ResponseMessage;
 import com.ivpo.beerchallenge.exception.ResponseStatus;
-import com.ivpo.beerchallenge.model.dto.BeerDto;
 import com.ivpo.beerchallenge.service.BeerServiceImpl;
+import com.ivpo.beerchallenge.util.LogEvent;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.time.OffsetDateTime;
@@ -16,10 +20,13 @@ import java.util.List;
 @RestController
 public class BeerRestController implements BeerRestControllerApi {
 
-    BeerServiceImpl beerService;
+    private BeerServiceImpl beerService;
 
-    public BeerRestController(BeerServiceImpl beerService) {
+    private MessageSource messageSource;
+
+    public BeerRestController(BeerServiceImpl beerService, MessageSource messageSource) {
         this.beerService = beerService;
+        this.messageSource = messageSource;
     }
 
     @Override
@@ -30,6 +37,7 @@ public class BeerRestController implements BeerRestControllerApi {
     }
 
     @Override
+    @LogEvent
     public ResponseEntity<List<BeerDto>> beers() {
         List<BeerDto> allBeers = beerService.getAllBeers();
 
@@ -37,26 +45,19 @@ public class BeerRestController implements BeerRestControllerApi {
     }
 
     @Override
+    @LogEvent
     public ResponseEntity<BeerDto> getBeerById(String id) {
         BeerDto beer = beerService.getBeerById(Long.parseLong(id));
-        if (beer == null) {
-            final String errorMessage = String.format("Beer with the id %s is not found.", id);
-            throw new BeerNotFoundException(errorMessage);
-        }
 
         return new ResponseEntity<>(beer, HttpStatus.OK);
     }
 
     @Override
     public ResponseEntity<ResponseStatus> deleteBeerById(String id) {
-        try {
-            beerService.deleteById(Long.parseLong(id));
-        } catch (Exception e) {
-            final String errorMessage = String.format("Beer with the id %s does not exist.", id);
-            throw new BeerNotFoundException(errorMessage, e);
-        }
+        beerService.deleteById(Long.parseLong(id));
 
-        return createSuccessfulResponse(HttpStatus.OK, String.format("Beer with the id %s is deleted.", id));
+        final String responseMessage = messageSource.getMessage("BEER_IS_DELETED", new String[]{id}, LocaleContextHolder.getLocale());
+        return createSuccessfulResponse(HttpStatus.OK, responseMessage);
     }
 
     private ResponseEntity<ResponseStatus> createSuccessfulResponse(final HttpStatus httpStatus, final String message) {

@@ -1,4 +1,4 @@
-package com.ivpo.beerchallenge.model.dto;
+package com.ivpo.beerchallenge.dto;
 
 import java.util.List;
 import java.util.Objects;

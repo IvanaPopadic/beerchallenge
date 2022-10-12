@@ -1,7 +1,7 @@
 package com.ivpo.beerchallenge.controller;
 
+import com.ivpo.beerchallenge.dto.BeerDto;
 import com.ivpo.beerchallenge.exception.ResponseStatus;
-import com.ivpo.beerchallenge.model.dto.BeerDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

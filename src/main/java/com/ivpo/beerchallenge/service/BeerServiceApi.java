@@ -1,7 +1,6 @@
 package com.ivpo.beerchallenge.service;
 
-import com.ivpo.beerchallenge.model.BeerEntity;
-import com.ivpo.beerchallenge.model.dto.BeerDto;
+import com.ivpo.beerchallenge.dto.BeerDto;
 
 import java.util.List;
 

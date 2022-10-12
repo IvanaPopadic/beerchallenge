@@ -23,9 +23,12 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.liquibase:liquibase-core'
+	implementation 'org.aspectj:aspectjrt:1.9.9.1'
+	implementation 'org.aspectj:aspectjweaver:1.9.9.1'
 	runtimeOnly 'com.h2database:h2'
 	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'junit:junit:4.13.2'
 }
 
 tasks.named('test') {

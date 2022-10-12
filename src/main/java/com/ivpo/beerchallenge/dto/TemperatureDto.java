@@ -1,4 +1,4 @@
-package com.ivpo.beerchallenge.model.dto;
+package com.ivpo.beerchallenge.dto;
 
 import com.ivpo.beerchallenge.model.TemperatureUnit;
 
